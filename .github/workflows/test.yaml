@@ -25,6 +25,8 @@ jobs:
     needs: start_flask_app  # Ensures Flask app starts before the test
     runs-on: ubuntu-latest
 
+    timeout-minutes: 1  # Set a timeout limit of 1 minute (converts 15s)
+
     env:
       HOST: http://localhost:8000  # Adjust if your app is not running locally
       USERS: 100
@@ -43,4 +45,13 @@ jobs:
             --headless \
             --host=${HOST} \
             --users ${USERS} \
-            --spawn-rate ${HATCH_RATE} 
+            --spawn-rate ${HATCH_RATE} \
+            --run-time 15s
+
+      - name: Check for Locust errors (optional)
+        run: |
+          # Check for errors in Locust output (e.g., "Connection refused")
+          # If found, set the job status to failure
+          if grep -q "Connection refused" locust_output.txt; then
+            exit 1  # Exit with non-zero code to mark the job as failed
+          fi
