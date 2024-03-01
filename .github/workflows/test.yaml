@@ -20,6 +20,9 @@ jobs:
 
       - name: Install dependencies
         run: pip install locust
+      
+      - name: Running app.py
+        run: python app.py
 
       - name: Run load test
         run: python locustfile.py
