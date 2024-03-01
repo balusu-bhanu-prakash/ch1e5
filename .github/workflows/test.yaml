@@ -6,6 +6,7 @@ on:
       - main
 
 jobs:
+  # Separate job for starting the Flask app
   start_flask_app:
     runs-on: ubuntu-latest
 
@@ -13,18 +14,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install dependencies and start Flask app
-        run: |
-          pip install -r requirements.txt
-          python app.py &
-        # Ensure that the Flask app starts running in the background
+      - name: Install dependencies (Flask and others from requirements.txt)
+        run: pip install -r requirements.txt
 
+      - name: Start Flask application (in background)
+        run: nohup python app.py &
+
+  # Separate job for the Locust test
   locust:
-    needs: start_flask_app
+    needs: start_flask_app  # Ensures Flask app starts before the test
     runs-on: ubuntu-latest
 
     env:
-      HOST: http://localhost:8000
+      HOST: http://localhost:8000  # Adjust if your app is not running locally
       USERS: 100
       HATCH_RATE: 10
 
@@ -32,8 +34,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install dependencies
+      - name: Install dependencies (Locust)
         run: pip install locust
 
       - name: Run load test
-        run: locust -f locustfile.py --headless --host=${HOST} --users ${USERS} --spawn-rate ${HATCH_RATE} --run-time 15s
+        run: |
+          locust -f locustfile.py \
+            --headless \
+            --host=${HOST} \
+            --users ${USERS} \
+            --spawn-rate ${HATCH_RATE} \
+            --run-time 15s
