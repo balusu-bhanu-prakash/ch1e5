@@ -23,6 +23,3 @@ jobs:
       
       - name: Running app.py
         run: python app.py &&\ python locustfile.py
-
-      """- name: Run load test
-        run: python """
