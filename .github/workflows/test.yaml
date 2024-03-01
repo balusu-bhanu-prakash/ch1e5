@@ -1,0 +1,20 @@
+name: Load Testing
+
+on:
+  push:
+    branches:
+      - staging
+
+jobs:
+  locust:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: pip install locust
+
+      - name: Run load test
+        run: locust -f locustfile.py --headless --host=http://localhost:8000
