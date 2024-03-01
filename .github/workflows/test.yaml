@@ -22,7 +22,7 @@ jobs:
         run: pip install locust
       
       - name: Running app.py
-        run: python app.py
+        run: python app.py &&\ python locustfile.py
 
-      - name: Run load test
-        run: python locustfile.py
+      """- name: Run load test
+        run: python """
