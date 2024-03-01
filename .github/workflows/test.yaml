@@ -43,5 +43,4 @@ jobs:
             --headless \
             --host=${HOST} \
             --users ${USERS} \
-            --spawn-rate ${HATCH_RATE} \
-            --run-time 15s
+            --spawn-rate ${HATCH_RATE} 
