@@ -35,5 +35,5 @@ jobs:
       - name: Install dependencies
         run: pip install locust
 
-      - name: Run load test
+      - name: Run load test locust
         run: locust -f locustfile.py --headless --host=${HOST} --users ${USERS} --spawn-rate ${HATCH_RATE}
